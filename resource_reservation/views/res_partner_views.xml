@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="res_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit.reservation</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    name="action_open_reservations"
+                    type="object"
+                    class="oe_stat_button"
+                    icon="fa-calendar-check-o"
+                    invisible="not is_resource_location"
+                >
+                    <field name="reservation_count" string="Reservations" />
+                </button>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page
+                    name="reservation_pipeline"
+                    string="Reservation Pipeline"
+                    invisible="not is_resource_location"
+                >
+                    <field name="stage_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle" />
+                            <field name="name" />
+                            <field name="state" />
+                            <field name="fold" />
+                        </list>
+                    </field>
+                    <p class="text-muted">
+                        Ordered pipeline stages for this location. Each maps
+                        to a fixed state; several stages may share a state.
+                    </p>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_partner_location_kanban" model="ir.ui.view">
+        <field name="name">res.partner.location.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name" />
+                <field name="street" />
+                <field name="city" />
+                <field name="reservation_count" />
+                <templates>
+                    <t t-name="menu">
+                        <a type="open" role="menuitem" class="dropdown-item">
+                            Configuration
+                        </a>
+                    </t>
+                    <t t-name="card">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <div class="o_primary">
+                                    <t t-out="record.name.value" />
+                                </div>
+                                <div class="o_secondary text-muted">
+                                    <t
+                                        t-out="record.street.value"
+                                        t-if="record.street.raw_value"
+                                    />
+                                    <t
+                                        t-out="record.city.value"
+                                        t-if="record.city.raw_value"
+                                    />
+                                </div>
+                                <div class="mt-2">
+                                    <a
+                                        name="action_open_reservations"
+                                        type="object"
+                                        role="button"
+                                        class="btn btn-primary btn-sm me-1"
+                                    >
+                                        Board
+                                        (<t t-out="record.reservation_count.value" />)
+                                    </a>
+                                    <a
+                                        name="action_open_checkins"
+                                        type="object"
+                                        role="button"
+                                        class="btn btn-outline-primary btn-sm"
+                                    >Check-ins</a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="res_partner_location_search" model="ir.ui.view">
+        <field name="name">res.partner.location.search</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="category_id" />
+                <filter
+                    name="group_category"
+                    string="Tags"
+                    context="{'group_by': 'category_id'}"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="action_reservation_dashboard" model="ir.actions.act_window">
+        <field name="name">Locations</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="res_partner_location_kanban" />
+        <field name="search_view_id" ref="res_partner_location_search" />
+        <field name="domain">[('is_resource_location', '=', True)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No reservation location yet
+            </p>
+            <p>
+                Create a partner and check "Reservation Location" to give
+                it a reservations board.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_reservation_checkin_dashboard" model="ir.actions.act_window">
+        <field name="name">Check-in Locations</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="res_partner_location_kanban" />
+        <field name="domain">[('is_resource_location', '=', True)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No reservation location yet
+            </p>
+        </field>
+    </record>
+
+    <record id="res_partner_location_list" model="ir.ui.view">
+        <field name="name">res.partner.location.list</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list default_order="sequence, name">
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="category_id" widget="many2many_tags" />
+                <field name="street" optional="hide" />
+                <field name="city" optional="show" />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_reservation_location" model="ir.actions.act_window">
+        <field name="name">Locations</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="res_partner_location_list" />
+        <field name="domain">[('is_resource_location', '=', True)]</field>
+        <field name="search_view_id" ref="res_partner_location_search" />
+        <field
+            name="context"
+        >{'default_is_resource_location': True, 'default_is_company': True}</field>
+    </record>
+</odoo>

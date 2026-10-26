@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+reservation_category_user,Reservation categories user,model_resource_reservation_category,group_user,1,0,0,0
+reservation_category_manager,Reservation categories manager,model_resource_reservation_category,group_manager,1,1,1,1
+reservation_stage_user,Reservation stages user,model_resource_reservation_stage,group_user,1,0,0,0
+reservation_stage_manager,Reservation stages manager,model_resource_reservation_stage,group_manager,1,1,1,1
+reservation_type_user,Reservation types user,model_resource_reservation_type,group_user,1,0,0,0
+reservation_type_manager,Reservation types manager,model_resource_reservation_type,group_manager,1,1,1,1
+reservation_type_leg_user,Reservation type legs user,model_resource_reservation_type_leg,group_user,1,0,0,0
+reservation_type_leg_manager,Reservation type legs manager,model_resource_reservation_type_leg,group_manager,1,1,1,1
+reservation_user,Reservations user,model_resource_reservation,group_user,1,1,1,0
+reservation_manager,Reservations manager,model_resource_reservation,group_manager,1,1,1,1
+reservation_portal,Reservations portal,model_resource_reservation,base.group_portal,1,0,0,0
+reservation_line_user,Reservation lines user,model_resource_reservation_line,group_user,1,1,1,0
+reservation_line_manager,Reservation lines manager,model_resource_reservation_line,group_manager,1,1,1,1
+resource_resource_manager,Resources manager,resource.model_resource_resource,group_manager,1,1,1,1

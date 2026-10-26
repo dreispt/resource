@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="resource_resource_form_inherit" model="ir.ui.view">
+        <field name="name">resource.resource.form.inherit.reservation</field>
+        <field name="model">resource.resource</field>
+        <field name="inherit_id" ref="resource.resource_resource_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group name="reservation" string="Reservation">
+                    <group name="reservation_left">
+                        <field name="bookable" />
+                        <field name="tag_ids" widget="many2many_tags" />
+                        <field name="sequence" />
+                        <field name="quantity" />
+                    </group>
+                    <group name="reservation_right">
+                        <field name="role_ids" widget="many2many_tags" />
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="resource_resource_search_inherit" model="ir.ui.view">
+        <field name="name">resource.resource.search.inherit.reservation</field>
+        <field name="model">resource.resource</field>
+        <field name="inherit_id" ref="resource.view_resource_resource_search" />
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='material']" position="after">
+                <filter
+                    string="Reservable"
+                    name="bookable"
+                    domain="[('bookable', '=', True)]"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_resource_reservation_resources" model="ir.actions.act_window">
+        <field name="name">Resources</field>
+        <field name="res_model">resource.resource</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="resource.view_resource_resource_search" />
+        <field name="context">{'search_default_bookable': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Mark resources as reservable
+            </p>
+            <p>
+                Open a resource and check "Reservable" to make it
+                bookable by reservations.
+            </p>
+        </field>
+    </record>
+
+    <record id="resource_resource_list_inherit" model="ir.ui.view">
+        <field name="name">resource.resource.list.inherit.reservation</field>
+        <field name="model">resource.resource</field>
+        <field name="inherit_id" ref="resource.resource_resource_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="bookable" optional="hide" />
+                <field name="quantity" optional="hide" />
+            </xpath>
+        </field>
+    </record>
+</odoo>

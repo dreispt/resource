@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo noupdate="1">
+    <record id="pcat_salon" model="res.partner.category">
+        <field name="name">Salon</field>
+    </record>
+    <record id="pcat_restaurant" model="res.partner.category">
+        <field name="name">Restaurant</field>
+    </record>
+    <record id="pcat_rental" model="res.partner.category">
+        <field name="name">Rental</field>
+    </record>
+    <record id="pcat_clinic" model="res.partner.category">
+        <field name="name">Clinic</field>
+    </record>
+    <record id="pcat_hotel" model="res.partner.category">
+        <field name="name">Hotel</field>
+    </record>
+
+    <!-- ============ Categories ============ -->
+
+    <record id="category_appointments" model="resource.reservation.category">
+        <field name="name">Appointments</field>
+    </record>
+    <record id="category_rentals" model="resource.reservation.category">
+        <field name="name">Rentals</field>
+        <field name="sequence">20</field>
+    </record>
+    <!-- ============ Locations ============ -->
+
+    <record id="location_main_shop" model="res.partner">
+        <field name="name">Main Street Shop</field>
+        <field name="category_id" eval="[(4, ref('pcat_salon'))]" />
+        <field name="is_company" eval="True" />
+        <field name="is_resource_location" eval="True" />
+        <field name="street">12 Main Street</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="location_branch" model="res.partner">
+        <field name="name">Riverside Branch</field>
+        <field name="category_id" eval="[(4, ref('pcat_salon'))]" />
+        <field name="is_company" eval="True" />
+        <field name="is_resource_location" eval="True" />
+        <field name="street">5 Riverside Avenue</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- ============ Stage pipelines (per location) ============ -->
+
+    <record id="stage_app_requested" model="resource.reservation.stage">
+        <field name="name">Requested</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">requested</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="stage_app_scheduled" model="resource.reservation.stage">
+        <field name="name">Scheduled</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">scheduled</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="stage_app_confirmed" model="resource.reservation.stage">
+        <field name="name">Confirmed</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">scheduled</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="stage_app_attended" model="resource.reservation.stage">
+        <field name="name">Attended</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">in_progress</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="stage_app_done" model="resource.reservation.stage">
+        <field name="name">Done</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">done</field>
+        <field name="sequence">45</field>
+        <field name="fold" eval="True" />
+    </record>
+    <record id="stage_app_noshow" model="resource.reservation.stage">
+        <field name="name">No-show</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">no_show</field>
+        <field name="sequence">50</field>
+        <field name="fold" eval="True" />
+    </record>
+    <record id="stage_app_cancelled" model="resource.reservation.stage">
+        <field name="name">Cancelled</field>
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">cancelled</field>
+        <field name="sequence">60</field>
+        <field name="fold" eval="True" />
+    </record>
+
+    <record id="stage_rent_requested" model="resource.reservation.stage">
+        <field name="name">Requested</field>
+        <field name="location_id" ref="location_branch" />
+        <field name="state">requested</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="stage_rent_booked" model="resource.reservation.stage">
+        <field name="name">Booked</field>
+        <field name="location_id" ref="location_branch" />
+        <field name="state">scheduled</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="stage_rent_confirmed" model="resource.reservation.stage">
+        <field name="name">Confirmed</field>
+        <field name="location_id" ref="location_branch" />
+        <field name="state">scheduled</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="stage_rent_out" model="resource.reservation.stage">
+        <field name="name">Picked up</field>
+        <field name="location_id" ref="location_branch" />
+        <field name="state">in_progress</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="stage_rent_returned" model="resource.reservation.stage">
+        <field name="name">Returned</field>
+        <field name="location_id" ref="location_branch" />
+        <field name="state">done</field>
+        <field name="sequence">50</field>
+        <field name="fold" eval="True" />
+    </record>
+    <record id="stage_rent_cancelled" model="resource.reservation.stage">
+        <field name="name">Cancelled</field>
+        <field name="location_id" ref="location_branch" />
+        <field name="state">cancelled</field>
+        <field name="sequence">60</field>
+        <field name="fold" eval="True" />
+    </record>
+
+    <!-- ============ Per-vertical locations ============ -->
+
+    <record id="location_restaurant" model="res.partner">
+        <field name="name">The Terrace Restaurant</field>
+        <field name="category_id" eval="[(4, ref('pcat_restaurant'))]" />
+        <field name="street">7 Commerce Square</field>
+        <field name="city">Lisbon</field>
+        <field name="is_resource_location" eval="True" />
+        <field
+            name="stage_ids"
+            eval="[
+            (0, 0, {'name': 'Requested', 'sequence': 10, 'state': 'draft'}),
+            (0, 0, {'name': 'Booked', 'sequence': 20, 'state': 'scheduled'}),
+            (0, 0, {'name': 'Done', 'sequence': 30, 'state': 'done'}),
+            (0, 0, {'name': 'No-show', 'sequence': 40, 'state': 'no_show', 'fold': True}),
+            (0, 0, {'name': 'Cancelled', 'sequence': 50, 'state': 'cancelled', 'fold': True})
+        ]"
+        />
+    </record>
+    <record id="location_bike" model="res.partner">
+        <field name="name">Riverside Bike Rental</field>
+        <field name="category_id" eval="[(4, ref('pcat_rental'))]" />
+        <field name="street">3 Sodré Pier</field>
+        <field name="city">Lisbon</field>
+        <field name="is_resource_location" eval="True" />
+        <field
+            name="stage_ids"
+            eval="[
+            (0, 0, {'name': 'Requested', 'sequence': 10, 'state': 'draft'}),
+            (0, 0, {'name': 'Booked', 'sequence': 20, 'state': 'scheduled'}),
+            (0, 0, {'name': 'Picked up', 'sequence': 30, 'state': 'in_progress'}),
+            (0, 0, {'name': 'Returned', 'sequence': 40, 'state': 'done'}),
+            (0, 0, {'name': 'Cancelled', 'sequence': 50, 'state': 'cancelled', 'fold': True})
+        ]"
+        />
+    </record>
+    <record id="location_clinic" model="res.partner">
+        <field name="name">City Clinic</field>
+        <field name="category_id" eval="[(4, ref('pcat_clinic'))]" />
+        <field name="is_company" eval="True" />
+        <field name="is_resource_location" eval="True" />
+        <field name="street">8 Health Avenue</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="location_hotel" model="res.partner">
+        <field name="name">Harbor Hotel</field>
+        <field name="category_id" eval="[(4, ref('pcat_hotel'))]" />
+        <field name="is_company" eval="True" />
+        <field name="is_resource_location" eval="True" />
+        <field name="street">1 Harbor Road</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- ============ Functions ============ -->
+
+    <record id="role_haircut" model="resource.role">
+        <field name="name">Haircut</field>
+    </record>
+    <record id="role_colorist" model="resource.role">
+        <field name="name">Colorist</field>
+    </record>
+    <record id="role_physician" model="resource.role">
+        <field name="name">Physician</field>
+    </record>
+    <record id="role_exam_room" model="resource.role">
+        <field name="name">Exam room</field>
+    </record>
+    <record id="role_table_seat" model="resource.role">
+        <field name="name">Table seat</field>
+    </record>
+    <record id="role_bike" model="resource.role">
+        <field name="name">City bike</field>
+    </record>
+    <record id="role_hotel_room" model="resource.role">
+        <field name="name">Hotel room</field>
+    </record>
+
+    <!-- ============ Presence calendars (rotating staff) ============ -->
+
+    <record id="calendar_mon_wed" model="resource.calendar">
+        <field name="name">Mon-Wed 9:00-18:00</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field
+            name="attendance_ids"
+            eval="[
+            (0, 0, {'name': 'Monday morning', 'dayofweek': '0', 'hour_from': 9, 'hour_to': 13, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Monday afternoon', 'dayofweek': '0', 'hour_from': 14, 'hour_to': 18, 'day_period': 'afternoon'}),
+            (0, 0, {'name': 'Tuesday morning', 'dayofweek': '1', 'hour_from': 9, 'hour_to': 13, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Tuesday afternoon', 'dayofweek': '1', 'hour_from': 14, 'hour_to': 18, 'day_period': 'afternoon'}),
+            (0, 0, {'name': 'Wednesday morning', 'dayofweek': '2', 'hour_from': 9, 'hour_to': 13, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Wednesday afternoon', 'dayofweek': '2', 'hour_from': 14, 'hour_to': 18, 'day_period': 'afternoon'}),
+        ]"
+        />
+    </record>
+    <record id="calendar_thu_sat" model="resource.calendar">
+        <field name="name">Thu-Sat 9:00-18:00</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field
+            name="attendance_ids"
+            eval="[
+            (0, 0, {'name': 'Thursday morning', 'dayofweek': '3', 'hour_from': 9, 'hour_to': 13, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Thursday afternoon', 'dayofweek': '3', 'hour_from': 14, 'hour_to': 18, 'day_period': 'afternoon'}),
+            (0, 0, {'name': 'Friday morning', 'dayofweek': '4', 'hour_from': 9, 'hour_to': 13, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Friday afternoon', 'dayofweek': '4', 'hour_from': 14, 'hour_to': 18, 'day_period': 'afternoon'}),
+            (0, 0, {'name': 'Saturday morning', 'dayofweek': '5', 'hour_from': 9, 'hour_to': 13, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Saturday afternoon', 'dayofweek': '5', 'hour_from': 14, 'hour_to': 18, 'day_period': 'afternoon'}),
+        ]"
+        />
+    </record>
+    <record id="calendar_allday" model="resource.calendar">
+        <field name="name">Continuous (hotel)</field>
+        <field name="tz">Europe/Lisbon</field>
+        <field
+            name="attendance_ids"
+            eval="[
+            (0, 0, {'name': 'Monday', 'dayofweek': '0', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Tuesday', 'dayofweek': '1', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Wednesday', 'dayofweek': '2', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Thursday', 'dayofweek': '3', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Friday', 'dayofweek': '4', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Saturday', 'dayofweek': '5', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+            (0, 0, {'name': 'Sunday', 'dayofweek': '6', 'hour_from': 0, 'hour_to': 24, 'day_period': 'morning'}),
+        ]"
+        />
+    </record>
+
+    <record id="stage_clinic_requested" model="resource.reservation.stage">
+        <field name="name">Requested</field>
+        <field name="location_id" ref="location_clinic" />
+        <field name="state">requested</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="stage_clinic_scheduled" model="resource.reservation.stage">
+        <field name="name">Scheduled</field>
+        <field name="location_id" ref="location_clinic" />
+        <field name="state">scheduled</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="stage_clinic_in_room" model="resource.reservation.stage">
+        <field name="name">In consultation</field>
+        <field name="location_id" ref="location_clinic" />
+        <field name="state">in_progress</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="stage_clinic_done" model="resource.reservation.stage">
+        <field name="name">Done</field>
+        <field name="location_id" ref="location_clinic" />
+        <field name="state">done</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="stage_hotel_requested" model="resource.reservation.stage">
+        <field name="name">Requested</field>
+        <field name="location_id" ref="location_hotel" />
+        <field name="state">requested</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="stage_hotel_booked" model="resource.reservation.stage">
+        <field name="name">Booked</field>
+        <field name="location_id" ref="location_hotel" />
+        <field name="state">scheduled</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="stage_hotel_checked_in" model="resource.reservation.stage">
+        <field name="name">Checked in</field>
+        <field name="location_id" ref="location_hotel" />
+        <field name="state">in_progress</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="stage_hotel_checked_out" model="resource.reservation.stage">
+        <field name="name">Checked out</field>
+        <field name="location_id" ref="location_hotel" />
+        <field name="state">done</field>
+        <field name="sequence">40</field>
+    </record>
+
+    <!-- ============ Staff users ============ -->
+
+    <record id="user_john" model="res.users" context="{'no_reset_password': True}">
+        <field name="login">john</field>
+        <field name="name">John Silva</field>
+    </record>
+    <record id="user_mary" model="res.users" context="{'no_reset_password': True}">
+        <field name="login">mary</field>
+        <field name="name">Mary Carter</field>
+    </record>
+    <record id="user_doctor" model="res.users" context="{'no_reset_password': True}">
+        <field name="login">dr.smith</field>
+        <field name="name">Dr. Smith</field>
+    </record>
+
+    <!-- ============ Resources ============ -->
+
+    <record id="resource_barber_john" model="resource.resource">
+        <field name="user_id" ref="user_john" />
+        <field name="name">John (barber)</field>
+        <field name="resource_type">user</field>
+        <field name="bookable" eval="True" />
+        <field name="role_ids" eval="[(6, 0, [ref('role_haircut')])]" />
+        <field name="calendar_id" ref="resource.resource_calendar_std" />
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_main_shop')})
+        ]"
+        />
+    </record>
+    <record id="resource_barber_mary" model="resource.resource">
+        <field name="user_id" ref="user_mary" />
+        <field name="name">Mary (barber/colorist)</field>
+        <field name="resource_type">user</field>
+        <field name="bookable" eval="True" />
+        <field
+            name="role_ids"
+            eval="[(6, 0, [ref('role_haircut'), ref('role_colorist')])]"
+        />
+        <field name="calendar_id" ref="resource.resource_calendar_std" />
+        <!-- Rotating: Mon-Wed at main shop, Thu-Sat at the branch -->
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_main_shop'), 'calendar_id': ref('calendar_mon_wed'), 'sequence': 10}),
+            (0, 0, {'location_id': ref('location_branch'), 'calendar_id': ref('calendar_thu_sat'), 'sequence': 20})
+        ]"
+        />
+    </record>
+    <record id="resource_exam_room" model="resource.resource">
+        <field name="name">Exam room 1</field>
+        <field name="resource_type">material</field>
+        <field name="bookable" eval="True" />
+        <field name="role_ids" eval="[(6, 0, [ref('role_exam_room')])]" />
+        <field name="calendar_id" ref="resource.resource_calendar_std" />
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_clinic')})
+        ]"
+        />
+    </record>
+
+    <record id="resource_doctor" model="resource.resource">
+        <field name="user_id" ref="user_doctor" />
+        <field name="name">Dr. Smith</field>
+        <field name="resource_type">user</field>
+        <field name="bookable" eval="True" />
+        <field name="role_ids" eval="[(6, 0, [ref('role_physician')])]" />
+        <field name="calendar_id" ref="resource.resource_calendar_std" />
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_clinic')})
+        ]"
+        />
+    </record>
+    <record id="resource_table_seats" model="resource.resource">
+        <field name="name">Table seats</field>
+        <field name="resource_type">material</field>
+        <field name="bookable" eval="True" />
+        <field name="quantity">20</field>
+        <field name="role_ids" eval="[(6, 0, [ref('role_table_seat')])]" />
+        <field name="calendar_id" ref="resource.resource_calendar_std" />
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_restaurant')})
+        ]"
+        />
+    </record>
+    <record id="resource_bikes" model="resource.resource">
+        <field name="name">City bikes</field>
+        <field name="resource_type">material</field>
+        <field name="bookable" eval="True" />
+        <field name="quantity">5</field>
+        <field name="role_ids" eval="[(6, 0, [ref('role_bike')])]" />
+        <field name="calendar_id" ref="calendar_allday" />
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_bike')})
+        ]"
+        />
+    </record>
+    <record id="resource_hotel_room" model="resource.resource">
+        <field name="name">Room 101</field>
+        <field name="resource_type">material</field>
+        <field name="bookable" eval="True" />
+        <field name="role_ids" eval="[(6, 0, [ref('role_hotel_room')])]" />
+        <field name="calendar_id" ref="calendar_allday" />
+        <field
+            name="presence_ids"
+            eval="[
+            (0, 0, {'location_id': ref('location_hotel')})
+        ]"
+        />
+    </record>
+
+    <!-- ============ Reservation types ============ -->
+
+    <record id="type_haircut" model="resource.reservation.type">
+        <field name="name">Haircut</field>
+        <field name="category_id" ref="category_appointments" />
+        <field name="flow">in</field>
+        <field name="duration">0.5</field>
+        <field name="slot_duration">0.5</field>
+        <field name="reservation_calendar_id" ref="resource.resource_calendar_std" />
+        <field
+            name="location_ids"
+            eval="[(6, 0, [ref('location_main_shop'), ref('location_branch')])]"
+        />
+        <field
+            name="leg_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_haircut')})
+        ]"
+        />
+    </record>
+    <record id="type_color" model="resource.reservation.type">
+        <field name="name">Color treatment</field>
+        <field name="category_id" ref="category_appointments" />
+        <field name="flow">in</field>
+        <field name="duration">1.5</field>
+        <field name="slot_duration">0.5</field>
+        <field name="reservation_calendar_id" ref="resource.resource_calendar_std" />
+        <field
+            name="location_ids"
+            eval="[(6, 0, [ref('location_main_shop'), ref('location_branch')])]"
+        />
+        <field
+            name="leg_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_colorist')})
+        ]"
+        />
+    </record>
+    <record id="type_consult" model="resource.reservation.type">
+        <field name="name">Doctor consultation</field>
+        <field name="category_id" ref="category_appointments" />
+        <field name="flow">in</field>
+        <field name="duration">0.5</field>
+        <field name="slot_duration">0.5</field>
+        <field name="reservation_calendar_id" ref="resource.resource_calendar_std" />
+        <field name="location_ids" eval="[(6, 0, [ref('location_clinic')])]" />
+        <!-- Doctor + room, atomically -->
+        <field
+            name="leg_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_physician'), 'sequence': 10}),
+            (0, 0, {'role_id': ref('role_exam_room'), 'sequence': 20})
+        ]"
+        />
+    </record>
+    <record id="type_table" model="resource.reservation.type">
+        <field name="name">Table reservation</field>
+        <field name="category_id" ref="category_appointments" />
+        <field name="flow">in</field>
+        <field name="duration">1.5</field>
+        <field name="slot_duration">0.5</field>
+        <field name="reservation_calendar_id" ref="resource.resource_calendar_std" />
+        <field name="location_ids" eval="[(6, 0, [ref('location_restaurant')])]" />
+        <field
+            name="leg_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_table_seat')})
+        ]"
+        />
+    </record>
+    <record id="type_bike_rental" model="resource.reservation.type">
+        <field name="name">City bike rental</field>
+        <field name="category_id" ref="category_rentals" />
+        <field name="flow">out</field>
+        <field name="duration">24</field>
+        <field name="slot_duration">1</field>
+        <field name="reservation_calendar_id" ref="calendar_allday" />
+        <field name="location_ids" eval="[(6, 0, [ref('location_bike')])]" />
+        <field
+            name="leg_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_bike')})
+        ]"
+        />
+    </record>
+    <record id="type_hotel_night" model="resource.reservation.type">
+        <field name="name">Hotel night</field>
+        <field name="category_id" ref="category_appointments" />
+        <field name="flow">in</field>
+        <field name="duration">20</field>
+        <field name="slot_duration">24</field>
+        <field name="buffer_after">4</field>
+        <field name="reservation_calendar_id" ref="calendar_allday" />
+        <field name="location_ids" eval="[(6, 0, [ref('location_hotel')])]" />
+        <field
+            name="leg_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_hotel_room')})
+        ]"
+        />
+    </record>
+
+    <!-- ============ Resource groups ============ -->
+
+    <!-- ============ Customers ============ -->
+
+    <record id="partner_sofia" model="res.partner">
+        <field name="name">Sofia Almeida</field>
+        <field name="email">sofia.almeida@example.com</field>
+        <field name="phone">+351 912 345 678</field>
+    </record>
+    <record id="partner_miguel" model="res.partner">
+        <field name="name">Miguel Santos</field>
+        <field name="email">miguel.santos@example.com</field>
+    </record>
+
+    <!-- ============ Reservations across the pipeline ============ -->
+
+    <record id="res_haircut_requested" model="resource.reservation">
+        <field name="name">Haircut invitation (Sofia)</field>
+        <field name="partner_id" ref="partner_sofia" />
+        <field name="type_id" ref="type_haircut" />
+        <field name="location_id" ref="location_main_shop" />
+        <field name="state">requested</field>
+    </record>
+    <record id="res_haircut_scheduled" model="resource.reservation">
+        <field name="partner_id" ref="partner_sofia" />
+        <field name="type_id" ref="type_haircut" />
+        <field name="location_id" ref="location_main_shop" />
+        <field
+            name="start"
+            eval="(datetime.now() + relativedelta(days=(8 - datetime.now().weekday()) % 7)).strftime('%Y-%m-%d 10:00:00')"
+        />
+        <field name="state">scheduled</field>
+        <field
+            name="line_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_haircut'), 'resource_id': ref('resource_barber_mary'), 'quantity': 1})
+        ]"
+        />
+    </record>
+    <record id="res_consult_scheduled" model="resource.reservation">
+        <field name="partner_id" ref="partner_miguel" />
+        <field name="type_id" ref="type_consult" />
+        <field name="location_id" ref="location_clinic" />
+        <field
+            name="start"
+            eval="((datetime.now() + relativedelta(days=(8 - datetime.now().weekday()) % 7)) + relativedelta(days=1)).strftime('%Y-%m-%d 14:00:00')"
+        />
+        <field name="state">scheduled</field>
+        <field
+            name="line_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_physician'), 'resource_id': ref('resource_doctor'), 'quantity': 1, 'sequence': 10}),
+            (0, 0, {'role_id': ref('role_exam_room'), 'resource_id': ref('resource_exam_room'), 'quantity': 1, 'sequence': 20})
+        ]"
+        />
+    </record>
+    <record id="res_table_scheduled" model="resource.reservation">
+        <field name="partner_id" ref="partner_miguel" />
+        <field name="type_id" ref="type_table" />
+        <field name="location_id" ref="location_restaurant" />
+        <field name="guests">4</field>
+        <field
+            name="start"
+            eval="(datetime.now() + relativedelta(days=(8 - datetime.now().weekday()) % 7)).strftime('%Y-%m-%d 13:30:00')"
+        />
+        <field name="state">scheduled</field>
+        <field
+            name="line_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_table_seat'), 'resource_id': ref('resource_table_seats'), 'quantity': 4})
+        ]"
+        />
+    </record>
+    <record id="res_bike_pickedup" model="resource.reservation">
+        <field name="partner_id" ref="partner_miguel" />
+        <field name="type_id" ref="type_bike_rental" />
+        <field name="location_id" ref="location_bike" />
+        <field
+            name="start"
+            eval="(datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d 10:00:00')"
+        />
+        <field name="state">in_progress</field>
+        <field
+            name="line_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_bike'), 'resource_id': ref('resource_bikes'), 'quantity': 2})
+        ]"
+        />
+    </record>
+    <record id="res_hotel_scheduled" model="resource.reservation">
+        <field name="partner_id" ref="partner_sofia" />
+        <field name="type_id" ref="type_hotel_night" />
+        <field name="location_id" ref="location_hotel" />
+        <field
+            name="start"
+            eval="((datetime.now() + relativedelta(days=(8 - datetime.now().weekday()) % 7)) + relativedelta(days=2)).strftime('%Y-%m-%d 15:00:00')"
+        />
+        <field name="state">scheduled</field>
+        <field
+            name="line_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_hotel_room'), 'resource_id': ref('resource_hotel_room'), 'quantity': 1})
+        ]"
+        />
+    </record>
+    <record id="res_color_scheduled" model="resource.reservation">
+        <field name="partner_id" ref="partner_miguel" />
+        <field name="type_id" ref="type_color" />
+        <field name="location_id" ref="location_main_shop" />
+        <field
+            name="start"
+            eval="(datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d 11:00:00')"
+        />
+        <field name="state">scheduled</field>
+        <field
+            name="line_ids"
+            eval="[
+            (0, 0, {'role_id': ref('role_colorist'), 'resource_id': ref('resource_barber_mary'), 'quantity': 1})
+        ]"
+        />
+    </record>
+</odoo>

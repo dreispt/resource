@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="resource_reservation_type_form" model="ir.ui.view">
+        <field name="name">resource.reservation.type.form</field>
+        <field name="model">resource.reservation.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <header />
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_reservations"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-calendar"
+                        >
+                            <field name="reservation_count" string="Reservations" />
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="e.g. Haircut" />
+                        </h1>
+                    </div>
+                    <group name="main">
+                        <group name="general" string="General">
+                            <field name="category_id" />
+                            <field name="flow" />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                        </group>
+                        <group name="timing" string="Timing">
+                            <field name="duration" widget="float_time" />
+                            <field name="slot_duration" widget="float_time" />
+                            <field name="buffer_before" widget="float_time" />
+                            <field name="buffer_after" widget="float_time" />
+                        </group>
+                        <group name="rules" string="Booking Rules">
+                            <field name="reservation_calendar_id" />
+                            <field name="booking_min_notice" />
+                            <field name="booking_max_horizon" />
+                            <field name="modifications_deadline" />
+                        </group>
+                        <group name="assignment" string="Assignment">
+                            <field name="assignment" />
+                            <field name="allow_resource_choice" />
+                            <field
+                                name="allow_no_preference"
+                                invisible="not allow_resource_choice"
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="legs" string="Required Functions">
+                            <field name="leg_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="role_id" />
+                                    <field name="quantity" />
+                                </list>
+                            </field>
+                        </page>
+                        <page name="locations" string="Locations">
+                            <field
+                                name="location_ids"
+                                widget="many2many_tags"
+                                options="{'no_create': True}"
+                            />
+                            <field name="videocall_location" />
+                        </page>
+                        <page name="notes" string="Notes">
+                            <field name="requester_advice" nolabel="1" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+
+    <record id="resource_reservation_type_list" model="ir.ui.view">
+        <field name="name">resource.reservation.type.list</field>
+        <field name="model">resource.reservation.type</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+                <field name="category_id" />
+                <field name="flow" />
+                <field name="duration" widget="float_time" />
+                <field name="reservation_calendar_id" />
+                <field name="reservation_count" string="# Reservations" />
+            </list>
+        </field>
+    </record>
+
+    <record id="resource_reservation_type_search" model="ir.ui.view">
+        <field name="name">resource.reservation.type.search</field>
+        <field name="model">resource.reservation.type</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <filter name="flow_in" string="IN" domain="[('flow', '=', 'in')]" />
+                <filter name="flow_out" string="OUT" domain="[('flow', '=', 'out')]" />
+                <group>
+                    <filter
+                        name="group_category"
+                        string="Category"
+                        context="{'group_by': 'category_id'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_resource_reservation_type" model="ir.actions.act_window">
+        <field name="name">Reservation Types</field>
+        <field name="res_model">resource.reservation.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="resource_reservation_type_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first reservation type
+            </p>
+            <p>
+                A type is what can be booked: duration, required
+                roles, availability schedule and booking rules.
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <menuitem
+        id="menu_resource_reservation_root"
+        name="Reservations"
+        groups="group_user"
+        sequence="50"
+    />
+    <menuitem
+        id="menu_resource_reservation"
+        name="Reservations"
+        parent="menu_resource_reservation_root"
+        action="action_reservation_dashboard"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_reservation_checkins"
+        name="Check-ins"
+        parent="menu_resource_reservation_root"
+        action="action_reservation_checkin_dashboard"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_reservation_all"
+        name="All Reservations"
+        parent="menu_resource_reservation_root"
+        action="action_resource_reservation"
+        sequence="25"
+    />
+    <menuitem
+        id="menu_reservation_resources"
+        name="Resources"
+        parent="menu_resource_reservation_root"
+        action="action_resource_reservation_resources"
+        sequence="30"
+    />
+    <menuitem
+        id="menu_reservation_reporting"
+        name="Reporting"
+        parent="menu_resource_reservation_root"
+        action="action_reservation_report"
+        sequence="80"
+    />
+    <menuitem
+        id="menu_reservation_configuration"
+        name="Configuration"
+        parent="menu_resource_reservation_root"
+        sequence="90"
+    />
+    <menuitem
+        id="menu_reservation_types"
+        name="Reservation Types"
+        parent="menu_reservation_configuration"
+        action="action_resource_reservation_type"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_reservation_categories"
+        name="Categories"
+        parent="menu_reservation_configuration"
+        action="action_resource_reservation_category"
+        sequence="20"
+    />
+    <menuitem
+        id="menu_reservation_locations"
+        name="Locations"
+        parent="menu_reservation_configuration"
+        action="action_reservation_location"
+        sequence="40"
+    />
+</odoo>

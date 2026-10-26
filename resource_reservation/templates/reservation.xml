@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <template id="reservation_page" name="Resource Reservation">
+        <t t-call="portal.portal_layout">
+            <div id="reservation_content" class="container o_portal_content">
+                <t t-set="r" t-value="reservation" />
+                <div class="card my-4">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <t t-out="r.type_id.display_name" />
+                            <t t-if="r.location_id">
+                                —
+                                <t t-out="r.location_id.display_name" />
+                            </t>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <t t-if="error">
+                            <div class="alert alert-danger" role="alert">
+                                <t t-out="error" />
+                            </div>
+                        </t>
+                        <p>
+                            <strong>Duration:</strong>
+                            <t t-out="r.duration" />
+                            h
+                            <t t-if="r.guests and r.guests > 1">
+                                —
+                                <strong>Guests:</strong>
+                                <t t-out="r.guests" />
+                            </t>
+                        </p>
+                        <t t-if="r.line_ids">
+                            <p>
+                                <strong>Resources:</strong>
+                                <t t-foreach="r.line_ids" t-as="line">
+                                    <t t-out="line.role_id.display_name" />
+                                    <t t-if="line.resource_id">
+                                        (<t
+                                        t-out="line.resource_id.display_name"
+                                    />)</t>
+                                    <t t-if="not line.resource_id">
+                                        (to be assigned)</t>
+                                    <t t-if="not line_last">, </t>
+                                </t>
+                            </p>
+                        </t>
+                        <t t-if="r.type_id.requester_advice">
+                            <p class="text-muted">
+                                <t t-out="r.type_id.requester_advice" />
+                            </p>
+                        </t>
+
+                        <!-- Already scheduled: show the slot -->
+                        <t t-if="r.state != 'draft'">
+                            <div class="alert alert-info">
+                                <strong>
+                                    <t t-out="state_label" />
+                                </strong>
+                                <t t-if="r.start">
+                                    —
+                                    <t
+                                    t-out="r.start"
+                                    t-options="{'widget': 'datetime', 'tz_name': r._get_tz()}"
+                                />
+                                </t>
+                            </div>
+                        </t>
+
+                        <!-- Pending: month grid + day slots -->
+                        <t t-if="r.state == 'draft'">
+                            <div
+                                class="d-flex justify-content-between align-items-center"
+                            >
+                                <a
+                                    t-att-href="'/reservation/%d?access_token=%s&amp;year=%d&amp;month=%d' % (r.id, access_token, (start - month_delta).year, (start - month_delta).month)"
+                                >&lt; Previous</a>
+                                <h4>
+                                    <t t-out="start.strftime('%B %Y')" />
+                                </h4>
+                                <a
+                                    t-att-href="'/reservation/%d?access_token=%s&amp;year=%d&amp;month=%d' % (r.id, access_token, (start + month_delta).year, (start + month_delta).month)"
+                                >Next &gt;</a>
+                            </div>
+                            <table class="table table-sm table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <t t-foreach="weekday_headers" t-as="weekday">
+                                            <th>
+                                                <t t-out="weekday[:3]" />
+                                            </th>
+                                        </t>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t
+                                        t-foreach="calendar.monthdatescalendar(start.year, start.month)"
+                                        t-as="week"
+                                    >
+                                        <tr>
+                                            <t t-foreach="week" t-as="day">
+                                                <t
+                                                    t-if="day.month == start.month and slots.get(day)"
+                                                >
+                                                    <td>
+                                                        <a
+                                                            t-att-href="'/reservation/%d?access_token=%s&amp;year=%d&amp;month=%d&amp;date=%s' % (r.id, access_token, start.year, start.month, day.isoformat())"
+                                                            t-attf-class="btn btn-sm {{'btn-primary' if selected_date == day.isoformat() else 'btn-outline-primary'}}"
+                                                        >
+                                                            <t t-out="day.day" />
+                                                        </a>
+                                                    </td>
+                                                </t>
+                                                <t t-else="">
+                                                    <td class="text-muted">
+                                                        <t
+                                                            t-if="day.month == start.month"
+                                                            t-out="day.day"
+                                                        />
+                                                    </td>
+                                                </t>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <t t-if="selected_date and day_slots">
+                                <h5>
+                                    Available times on
+                                    <t t-out="selected_date" />
+                                </h5>
+                                <form
+                                    t-action="'/reservation/%d/schedule' % r.id"
+                                    method="post"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        t-att-value="request.csrf_token()"
+                                    />
+                                    <input
+                                        type="hidden"
+                                        name="access_token"
+                                        t-att-value="access_token"
+                                    />
+                                    <t t-foreach="day_slots" t-as="slot">
+                                        <button
+                                            name="slot"
+                                            t-att-value="slot.isoformat()"
+                                            class="btn btn-outline-success m-1"
+                                        >
+                                            <t t-out="slot.strftime('%H:%M')" />
+                                        </button>
+                                    </t>
+                                </form>
+                            </t>
+                            <t t-if="selected_date and not day_slots">
+                                <p class="text-muted">
+                                    No free slots on this day.
+                                </p>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="resource_reservation_form" model="ir.ui.view">
+        <field name="name">resource.reservation.form</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_schedule"
+                        string="Schedule"
+                        type="object"
+                        class="oe_highlight"
+                        help="Assign resources and confirm the slot."
+                        invisible="state != 'draft' or not is_modifiable"
+                    />
+                    <button
+                        name="action_confirm"
+                        string="Confirm"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'scheduled' or not is_modifiable"
+                    />
+                    <button
+                        name="action_attend"
+                        string="Check-in"
+                        type="object"
+                        class="oe_highlight"
+                        help="Mark the customer as arrived."
+                        invisible="flow != 'in' or state != 'scheduled'"
+                    />
+                    <button
+                        name="action_no_show"
+                        string="No-show"
+                        type="object"
+                        invisible="flow != 'in' or state != 'scheduled'"
+                    />
+                    <button
+                        name="action_pick_up"
+                        string="Pick up"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="flow != 'out' or state != 'scheduled'"
+                    />
+                    <button
+                        name="action_return"
+                        string="Done"
+                        type="object"
+                        class="oe_highlight"
+                        help="Appointment completed or item returned."
+                        invisible="state != 'in_progress'"
+                    />
+                    <button
+                        name="action_assign"
+                        string="Assign resources"
+                        type="object"
+                        invisible="state != 'draft'"
+                    />
+                    <button
+                        name="action_unschedule"
+                        string="Unschedule"
+                        type="object"
+                        confirm="This clears the slot and removes the calendar event. Continue?"
+                        invisible="state != 'scheduled' or not is_modifiable"
+                    />
+                    <button
+                        name="action_cancel"
+                        string="Cancel"
+                        type="object"
+                        confirm="This cancels the reservation and removes its calendar event. Continue?"
+                        invisible="state in ('cancelled', 'done', 'no_show') or not is_modifiable"
+                    />
+                    <field
+                        name="stage_id"
+                        widget="statusbar"
+                        domain="[('location_id', '=', location_id)]"
+                    />
+                </header>
+                <sheet>
+                    <field name="active" invisible="1" />
+                    <field name="is_modifiable" invisible="1" />
+                    <field name="is_overdue" invisible="1" />
+                    <field name="category_id" invisible="1" />
+                    <field name="flow" invisible="1" />
+                    <field name="state" invisible="1" />
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        invisible="active"
+                    />
+                    <div
+                        class="alert alert-warning"
+                        role="alert"
+                        invisible="not is_overdue or not is_modifiable"
+                    >
+                        This reservation exceeded its modifications
+                        deadline.
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button
+                            name="action_open_portal"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-globe"
+                        >
+                            <span>Preview</span>
+                        </button>
+                        <button
+                            name="action_open_meeting"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-calendar"
+                            invisible="not meeting_id"
+                            string="Event"
+                        />
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Reservation name (auto)" />
+                        </h1>
+                    </div>
+                    <group name="main">
+                        <group name="booking">
+                            <field name="partner_id" />
+                            <field name="type_id" />
+                            <field
+                                name="location_id"
+                                required="not videocall_location"
+                            />
+                            <field name="guests" />
+                            <field name="user_id" />
+                        </group>
+                        <group name="slot" string="Slot">
+                            <field name="start" />
+                            <field
+                                name="duration"
+                                widget="float_time"
+                                class="oe_inline"
+                            />
+                            <field name="stop" readonly="1" />
+                            <field name="videocall_location" />
+                            <field name="meeting_id" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="resources" string="Resources">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="role_id" readonly="1" />
+                                    <field
+                                        name="resource_id"
+                                        domain="[('bookable', '=', True), ('role_ids', 'in', role_id)]"
+                                    />
+                                    <field name="quantity" />
+                                </list>
+                            </field>
+                            <p class="text-muted">
+                                Leave a resource empty for auto-assignment
+                                when the reservation is scheduled.
+                            </p>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+
+    <record id="resource_reservation_list" model="ir.ui.view">
+        <field name="name">resource.reservation.list</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'cancelled'">
+                <field name="name" string="Reservation" />
+                <field name="partner_id" />
+                <field name="type_id" />
+                <field name="location_id" />
+                <field name="start" />
+                <field name="stop" />
+                <field name="hold_expiration" readonly="1" invisible="not is_hold" />
+                <field name="stage_id" />
+                <field name="state" widget="badge" />
+            </list>
+        </field>
+    </record>
+
+    <record id="resource_reservation_kanban" model="ir.ui.view">
+        <field name="name">resource.reservation.kanban</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id">
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_content">
+                            <div>
+                                <strong>
+                                    <field name="display_name" />
+                                </strong>
+                            </div>
+                            <div>
+                                <field name="type_id" />
+                                <t t-if="record.location_id.raw_value">
+                                    —
+                                    <field name="location_id" />
+                                </t>
+                            </div>
+                            <div>
+                                <field name="start" widget="remaining_days" />
+                                <field name="state" widget="badge" />
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="resource_reservation_calendar" model="ir.ui.view">
+        <field name="name">resource.reservation.calendar</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <calendar date_start="start" date_stop="stop" color="type_id" mode="week">
+                <field name="partner_id" />
+                <field name="location_id" />
+                <field name="state" />
+                <field name="is_hold" invisible="True" />
+            </calendar>
+        </field>
+    </record>
+
+    <record id="resource_reservation_search" model="ir.ui.view">
+        <field name="name">resource.reservation.search</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="type_id" />
+                <field name="location_id" />
+                <filter
+                    name="draft"
+                    string="Draft"
+                    domain="[('state', '=', 'draft')]"
+                />
+                <filter
+                    name="upcoming"
+                    string="Upcoming"
+                    domain="[('state', 'in', ('scheduled', 'in_progress')), ('start', '&gt;=', context_today().strftime('%Y-%m-%d'))]"
+                />
+                <filter
+                    name="today"
+                    string="Today"
+                    domain="[('start', '&gt;=', context_today().strftime('%Y-%m-%d')), ('start', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"
+                />
+                <filter
+                    name="cancelled"
+                    string="Cancelled"
+                    domain="[('state', '=', 'cancelled')]"
+                />
+                <separator />
+                <filter
+                    name="archived"
+                    string="Archived"
+                    domain="[('active', '=', False)]"
+                />
+                <group>
+                    <filter
+                        name="group_stage"
+                        string="Stage"
+                        context="{'group_by': 'stage_id'}"
+                    />
+                    <filter
+                        name="group_state"
+                        string="State"
+                        context="{'group_by': 'state'}"
+                    />
+                    <filter
+                        name="group_type"
+                        string="Type"
+                        context="{'group_by': 'type_id'}"
+                    />
+                    <filter
+                        name="group_location"
+                        string="Location"
+                        context="{'group_by': 'location_id'}"
+                    />
+                    <filter
+                        name="group_week"
+                        string="Week"
+                        context="{'group_by': 'start:week'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_resource_reservation" model="ir.actions.act_window">
+        <field name="name">Reservations</field>
+        <field name="res_model">resource.reservation</field>
+        <field name="view_mode">kanban,list,calendar,form</field>
+        <field name="search_view_id" ref="resource_reservation_search" />
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first reservation
+            </p>
+            <p>
+                Pick a type and customer, fill the resource legs (or
+                leave them for auto-assignment), and schedule a slot.
+            </p>
+        </field>
+    </record>
+
+    <record id="resource_reservation_pivot" model="ir.ui.view">
+        <field name="name">resource.reservation.pivot</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <pivot string="Reservations Analysis">
+                <field name="type_id" type="row" />
+                <field name="location_id" type="row" />
+                <field name="state" type="col" />
+                <field name="guests" type="measure" />
+            </pivot>
+        </field>
+    </record>
+
+    <record id="resource_reservation_graph" model="ir.ui.view">
+        <field name="name">resource.reservation.graph</field>
+        <field name="model">resource.reservation</field>
+        <field name="arch" type="xml">
+            <graph type="bar" string="Reservations Analysis">
+                <field name="location_id" />
+                <field name="state" />
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_reservation_report" model="ir.actions.act_window">
+        <field name="name">Reservation Analysis</field>
+        <field name="res_model">resource.reservation</field>
+        <field name="view_mode">pivot,graph,list,calendar,form</field>
+        <field name="context">
+            {'group_by': ['location_id', 'type_id', 'start:month']}
+        </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No reservation to analyse yet
+            </p>
+        </field>
+    </record>
+
+    <record id="action_resource_reservation_checkins" model="ir.actions.act_window">
+        <field name="name">Check-ins</field>
+        <field name="res_model">resource.reservation</field>
+        <field name="view_mode">kanban,list,calendar,form</field>
+        <field name="search_view_id" ref="resource_reservation_search" />
+        <field name="context">{'search_default_upcoming': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No upcoming reservations
+            </p>
+        </field>
+    </record>
+</odoo>

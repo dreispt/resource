@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="resource_reservation_category_form" model="ir.ui.view">
+        <field name="name">resource.reservation.category.form</field>
+        <field name="model">resource.reservation.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="e.g. Appointments" />
+                        </h1>
+                    </div>
+                    <group name="main">
+                        <group>
+                            <field name="sequence" />
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="types" string="Reservation Types">
+                            <field name="type_ids" nolabel="1">
+                                <list>
+                                    <field name="name" />
+                                    <field name="flow" />
+                                    <field name="duration" widget="float_time" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="resource_reservation_category_list" model="ir.ui.view">
+        <field name="name">resource.reservation.category.list</field>
+        <field name="model">resource.reservation.category</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="name" />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_resource_reservation_category" model="ir.actions.act_window">
+        <field name="name">Categories</field>
+        <field name="res_model">resource.reservation.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
