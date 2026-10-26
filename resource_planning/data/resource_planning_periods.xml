@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo noupdate="1">
+    <record id="period_morning" model="resource.service.period">
+        <field name="name">Morning</field>
+        <field name="code">M</field>
+        <field name="sequence">10</field>
+        <field name="color">2</field>
+    </record>
+    <record id="period_day" model="resource.service.period">
+        <field name="name">Day</field>
+        <field name="code">D</field>
+        <field name="sequence">15</field>
+        <field name="color">3</field>
+    </record>
+    <record id="period_afternoon" model="resource.service.period">
+        <field name="name">Afternoon</field>
+        <field name="code">A</field>
+        <field name="sequence">20</field>
+        <field name="color">4</field>
+    </record>
+    <record id="period_evening" model="resource.service.period">
+        <field name="name">Evening</field>
+        <field name="code">E</field>
+        <field name="sequence">30</field>
+        <field name="color">5</field>
+    </record>
+    <record id="period_night" model="resource.service.period">
+        <field name="name">Night</field>
+        <field name="code">N</field>
+        <field name="sequence">40</field>
+        <field name="color">1</field>
+    </record>
+    <record id="period_off" model="resource.service.period">
+        <field name="name">Day Off</field>
+        <field name="code">O</field>
+        <field name="sequence">50</field>
+        <field name="color">0</field>
+        <field name="is_day_off" eval="True" />
+    </record>
+</odoo>

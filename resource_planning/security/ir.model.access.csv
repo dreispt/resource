@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+service_assignment_user,Service assignments user,model_resource_service_assignment,group_user,1,1,1,0
+service_assignment_manager,Service assignments manager,model_resource_service_assignment,group_manager,1,1,1,1
+service_period_user,Service periods user,model_resource_service_period,group_user,1,0,0,0
+service_period_manager,Service periods manager,model_resource_service_period,group_manager,1,1,1,1

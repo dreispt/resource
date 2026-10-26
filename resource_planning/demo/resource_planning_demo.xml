@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="resource_crew_a" model="resource.resource">
+        <field name="name">Crew A</field>
+        <field name="resource_type">material</field>
+        <field name="role_ids" eval="[(4, ref('resource_role.role_technician'))]" />
+    </record>
+    <record id="resource_crew_b" model="resource.resource">
+        <field name="name">Crew B</field>
+        <field name="resource_type">material</field>
+        <field
+            name="role_ids"
+            eval="[(6, 0, [ref('resource_role.role_technician'), ref('resource_role.role_supervisor')])]"
+        />
+    </record>
+    <record id="resource_van_1" model="resource.resource">
+        <field name="name">Van 1</field>
+        <field name="resource_type">material</field>
+        <field name="role_ids" eval="[(4, ref('resource_role.role_driver'))]" />
+    </record>
+</odoo>

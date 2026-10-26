@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="category_resource_planning" model="ir.module.category">
+        <field name="name">Resource Planning</field>
+    </record>
+    <record id="privilege_resource_planning" model="res.groups.privilege">
+        <field name="name">Resource Planning</field>
+        <field name="category_id" ref="category_resource_planning" />
+    </record>
+    <record id="group_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="privilege_id" ref="privilege_resource_planning" />
+        <field name="comment">Planners allowed to manage assignments</field>
+    </record>
+    <record id="group_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="privilege_id" ref="privilege_resource_planning" />
+        <field name="implied_ids" eval="[(4, ref('group_user'))]" />
+        <field
+            name="comment"
+        >Users allowed to configure roles, periods and defaults.</field>
+        <field
+            name="user_ids"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+    </record>
+    <data noupdate="1">
+        <record id="rule_assignment_company" model="ir.rule">
+            <field name="name">Service assignment multi company rule</field>
+            <field name="model_id" ref="model_resource_service_assignment" />
+            <field name="global" eval="True" />
+            <field
+                name="domain_force"
+            >[('company_id', 'in', company_ids + [False])]</field>
+        </record>
+    </data>
+</odoo>

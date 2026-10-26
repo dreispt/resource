@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <menuitem
+        id="menu_resource_planning_root"
+        name="Resource Planning"
+        groups="group_user"
+        sequence="51"
+        web_icon="resource_planning,static/description/icon.png"
+    />
+    <menuitem
+        id="menu_resources_planning"
+        name="Resources"
+        parent="menu_resource_planning_root"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_assignments"
+        name="Assignments"
+        parent="menu_resources_planning"
+        action="action_resource_service_assignment"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_configuration"
+        name="Configuration"
+        parent="menu_resource_planning_root"
+        sequence="90"
+    />
+    <menuitem
+        id="menu_roles"
+        name="Roles"
+        parent="menu_configuration"
+        action="resource_role.action_resource_role"
+        sequence="10"
+    />
+    <menuitem
+        id="menu_tags"
+        name="Tags"
+        parent="menu_configuration"
+        action="resource_role.action_resource_tag"
+        sequence="12"
+    />
+    <menuitem
+        id="menu_periods"
+        name="Periods"
+        parent="menu_configuration"
+        action="action_resource_service_period"
+        sequence="15"
+    />
+    <menuitem
+        id="menu_resources"
+        name="Resources"
+        parent="menu_configuration"
+        action="resource.action_resource_resource_tree"
+        sequence="20"
+    />
+</odoo>
