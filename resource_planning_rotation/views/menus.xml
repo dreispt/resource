@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <menuitem
+        id="menu_rotations"
+        name="Rotation Plans"
+        parent="resource_planning.menu_configuration"
+        action="action_resource_rotation_plan"
+        sequence="18"
+    />
+</odoo>

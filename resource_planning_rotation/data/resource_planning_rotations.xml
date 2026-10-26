@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo noupdate="1">
+    <record id="tag_on_off" model="resource.rotation.tag">
+        <field name="name">Fixed on / off</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="tag_shift_cycles" model="resource.rotation.tag">
+        <field name="name">Shift sequences</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="tag_12h" model="resource.rotation.tag">
+        <field name="name">12-hour patterns</field>
+        <field name="sequence">30</field>
+    </record>
+    <record id="tag_emergency" model="resource.rotation.tag">
+        <field name="name">Long duty</field>
+        <field name="sequence">40</field>
+    </record>
+    <record id="rotation_5on_2off" model="resource.rotation.plan">
+        <field name="name">5-on / 2-off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_on_off'))]" />
+        <field name="cycle_days">7</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_4on_4off" model="resource.rotation.plan">
+        <field name="name">4-on / 4-off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_on_off'))]" />
+        <field name="cycle_days">8</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_6on_4off" model="resource.rotation.plan">
+        <field name="name">6-on / 4-off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_on_off'))]" />
+        <field name="cycle_days">10</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_7on_7off" model="resource.rotation.plan">
+        <field name="name">7-on / 7-off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_on_off'))]" />
+        <field name="cycle_days">14</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_14on_14off" model="resource.rotation.plan">
+        <field name="name">14-on / 14-off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_on_off'))]" />
+        <field name="cycle_days">28</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 15, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 16, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 17, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 18, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 19, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 20, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 21, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 22, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 23, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 24, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 25, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 26, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 27, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 28, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_alternating_shifts" model="resource.rotation.plan">
+        <field name="name">Weekly alternating shifts</field>
+        <field name="tag_ids" eval="[(4, ref('tag_shift_cycles'))]" />
+        <field name="cycle_days">28</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 15, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 16, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 17, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 18, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 19, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 20, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 21, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 22, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 23, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 24, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 25, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 26, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 27, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 28, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_rapid_3shift" model="resource.rotation.plan">
+        <field name="name">24x7 rapid 3-shift</field>
+        <field name="tag_ids" eval="[(4, ref('tag_shift_cycles'))]" />
+        <field name="cycle_days">8</field>
+        <field
+            name="description"
+        >Fast 8-hour rotation: two mornings, two evenings, two nights, two days off.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_weekday_cycle" model="resource.rotation.plan">
+        <field name="name">24x5 week cycle</field>
+        <field name="tag_ids" eval="[(4, ref('tag_shift_cycles'))]" />
+        <field name="cycle_days">21</field>
+        <field
+            name="description"
+        >Continuous weekday coverage: each period worked Monday to Friday, weekends off, rotating weekly.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 15, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 16, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 17, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 18, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 19, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 20, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 21, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_2_2_3" model="resource.rotation.plan">
+        <field name="name">2-2-3 (Panama)</field>
+        <field name="tag_ids" eval="[(4, ref('tag_12h'))]" />
+        <field name="cycle_days">14</field>
+        <field
+            name="description"
+        >Twelve-hour pattern: two work days, two rest days, three work days, then two rest, two work and three rest days.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_pitman" model="resource.rotation.plan">
+        <field name="name">Pitman</field>
+        <field name="tag_ids" eval="[(4, ref('tag_12h'))]" />
+        <field name="cycle_days">14</field>
+        <field
+            name="description"
+        >Two-week 12-hour pattern: two work, two rest, three work, two rest, two work, three rest.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_dupont" model="resource.rotation.plan">
+        <field name="name">DuPont</field>
+        <field name="tag_ids" eval="[(4, ref('tag_12h'))]" />
+        <field name="cycle_days">28</field>
+        <field
+            name="description"
+        >Four-week 12-hour cycle: four nights, three rest, three days, one rest, three nights, three rest, four days, one week off.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 13, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 14, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 15, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 16, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 17, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 18, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 19, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 20, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 21, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 22, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 23, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 24, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 25, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 26, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 27, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 28, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_4days_4nights" model="resource.rotation.plan">
+        <field name="name">4 days / 4 nights / 4 off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_12h'))]" />
+        <field name="cycle_days">12</field>
+        <field
+            name="description"
+        >Continental 4-crew pattern: four day shifts, four night shifts, four rest days.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 9, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 10, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 11, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 12, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+
+    <record id="rotation_4crew_8h" model="resource.rotation.plan">
+        <field name="name">24x7 4-crew 8h</field>
+        <field name="tag_ids" eval="[(4, ref('tag_shift_cycles'))]" />
+        <field name="cycle_days">8</field>
+        <field
+            name="description"
+        >Four teams alternating Morning, Evening and Night periods in an eight-day cycle.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_off')})]}), (0, 0, {'code': 'B', 'sequence': 20, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_night')})]}), (0, 0, {'code': 'C', 'sequence': 30, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_evening')})]}), (0, 0, {'code': 'D', 'sequence': 40, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_evening')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 4, 'period_id': ref('resource_planning.period_night')}), (0, 0, {'day': 5, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 6, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 7, 'period_id': ref('resource_planning.period_morning')}), (0, 0, {'day': 8, 'period_id': ref('resource_planning.period_morning')})]})]"
+        />
+    </record>
+
+    <record id="rotation_24on_48off" model="resource.rotation.plan">
+        <field name="name">24-on / 48-off</field>
+        <field name="tag_ids" eval="[(4, ref('tag_emergency'))]" />
+        <field name="cycle_days">3</field>
+        <field
+            name="description"
+        >Emergency and fire duty: 24 hours on site, 48 hours off.</field>
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': 1, 'period_id': ref('resource_planning.period_day')}), (0, 0, {'day': 2, 'period_id': ref('resource_planning.period_off')}), (0, 0, {'day': 3, 'period_id': ref('resource_planning.period_off')})]})]"
+        />
+    </record>
+</odoo>

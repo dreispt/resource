@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo>
+    <record id="resource_resource_form_rotations" model="ir.ui.view">
+        <field name="name">resource.resource.form.rotations</field>
+        <field name="model">resource.resource</field>
+        <field name="inherit_id" ref="resource_planning.resource_resource_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button
+                        name="action_view_rotation_applications"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-recycle"
+                    >
+                        <field
+                            name="rotation_application_count"
+                            string="Rotation Plans"
+                        />
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

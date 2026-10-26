@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+service_rotation_user,Rotation plans user,model_resource_rotation_plan,resource_planning.group_user,1,1,1,0
+service_rotation_manager,Rotation plans manager,model_resource_rotation_plan,resource_planning.group_manager,1,1,1,1
+service_rotation_crew_user,Rotation crews user,model_resource_rotation_crew,resource_planning.group_user,1,1,1,0
+service_rotation_crew_manager,Rotation crews manager,model_resource_rotation_crew,resource_planning.group_manager,1,1,1,1
+service_rotation_cell_user,Rotation cells user,model_resource_rotation_cell,resource_planning.group_user,1,1,1,0
+service_rotation_cell_manager,Rotation cells manager,model_resource_rotation_cell,resource_planning.group_manager,1,1,1,1
+service_rotation_tag_user,Rotation tags user,model_resource_rotation_tag,resource_planning.group_user,1,1,1,0
+service_rotation_tag_manager,Rotation tags manager,model_resource_rotation_tag,resource_planning.group_manager,1,1,1,1
+service_rotation_application_user,Rotation applications user,model_resource_rotation_application,resource_planning.group_user,1,1,1,0
+service_rotation_application_manager,Rotation applications manager,model_resource_rotation_application,resource_planning.group_manager,1,1,1,1

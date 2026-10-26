@@ -1,0 +1,21 @@
+{
+    "name": "Resource Planning — Rotations",
+    "summary": "Reusable rotation plans applied to resources.",
+    "version": "19.0.1.1.0",
+    "category": "Human Resources",
+    "license": "LGPL-3",
+    "author": "Daniel Reis, Odoo Community Association (OCA)",
+    "website": "https://github.com/OCA/resource",
+    "depends": ["resource_planning"],
+    "data": [
+        "security/resource_planning_rotation_security.xml",
+        "security/ir.model.access.csv",
+        "data/resource_planning_rotations.xml",
+        "views/resource_rotation_plan_views.xml",
+        "views/resource_resource_views.xml",
+        "views/menus.xml",
+    ],
+    "demo": ["demo/resource_planning_rotation_demo.xml"],
+    "application": False,
+    "installable": True,
+}

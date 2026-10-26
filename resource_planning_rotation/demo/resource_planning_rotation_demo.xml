@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Daniel Reis
+     License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl). -->
+<odoo noupdate="1">
+    <record id="rotation_gate_crew" model="resource.rotation.plan">
+        <field name="name">Gate crew rotation</field>
+        <field name="cycle_days" eval="8" />
+        <field
+            name="crew_ids"
+            eval="[(0, 0, {'code': 'A', 'sequence': 10, 'cell_ids': [(0, 0, {'day': d, 'period_id': ref('resource_planning.period_' + p)}) for d, p in [(1, 'morning'), (2, 'morning'), (3, 'evening'), (4, 'evening'), (5, 'night'), (6, 'night'), (7, 'off'), (8, 'off')]]})]"
+        />
+    </record>
+</odoo>
