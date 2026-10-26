@@ -36,9 +36,16 @@ Shared "location" concept for resource apps: a location is a
 ``res.partner`` flagged as a resource work site, giving name, address,
 timezone and geo coordinates for free.
 
-Used by Resource Reservation (bookable sites) and Resource Planning —
-Demand (service post sites), so the same site is marked once and seen by
-both apps.
+Also provides **presence lines** (``resource.location.presence``): which
+locations a resource is available at, and on what calendar. A line with
+no calendar means the resource is always at that location; a resource
+with no lines at all is available anywhere. The first line by sequence
+covering an instant wins when several overlap.
+
+Used by Resource Reservation (bookable sites + per-location
+availability) and Resource Planning (service post sites), so the same
+site and the same presence semantics are defined once and seen by both
+apps.
 
 .. IMPORTANT::
    This is an alpha version, the data model and design can change at any time without warning.
@@ -49,6 +56,25 @@ both apps.
 
 .. contents::
    :local:
+
+Configuration
+=============
+
+- Mark a partner as a resource location: on the partner form set
+  **Resource Location** (a company-level flag).
+- On a ``resource.resource`` form, the **Location presence** section
+  holds the lines: *location* + optional *presence schedule*
+  (``resource.calendar``). Leave the calendar empty for an always-on
+  presence at that site.
+
+Usage
+=====
+
+Consumers read the presence map through
+``resource.get_locations_on_period(start, end)``, which returns
+``{resource_id: {location_id: Intervals}}`` — the instants each resource
+is present at each location. An empty inner map means "present at any
+location".
 
 Bug Tracker
 ===========

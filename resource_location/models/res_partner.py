@@ -15,3 +15,7 @@ class ResPartner(models.Model):
         "Planning; its address and timezone are used by "
         "location-aware features.",
     )
+    sequence = fields.Integer(
+        default=10,
+        help="Ordering for location dashboards and configuration lists.",
+    )
