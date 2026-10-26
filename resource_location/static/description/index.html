@@ -378,9 +378,15 @@ ul.auto-toc {
 <p>Shared “location” concept for resource apps: a location is a
 <tt class="docutils literal">res.partner</tt> flagged as a resource work site, giving name, address,
 timezone and geo coordinates for free.</p>
-<p>Used by Resource Reservation (bookable sites) and Resource Planning —
-Demand (service post sites), so the same site is marked once and seen by
-both apps.</p>
+<p>Also provides <strong>presence lines</strong> (<tt class="docutils literal">resource.location.presence</tt>): which
+locations a resource is available at, and on what calendar. A line with
+no calendar means the resource is always at that location; a resource
+with no lines at all is available anywhere. The first line by sequence
+covering an instant wins when several overlap.</p>
+<p>Used by Resource Reservation (bookable sites + per-location
+availability) and Resource Planning (service post sites), so the same
+site and the same presence semantics are defined once and seen by both
+apps.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
 <p class="last">This is an alpha version, the data model and design can change at any time without warning.
@@ -390,17 +396,38 @@ Only for development or testing purpose, do not use in production.
 <p><strong>Table of contents</strong></p>
 <div class="contents local topic" id="contents">
 <ul class="simple">
-<li><a class="reference internal" href="#bug-tracker" id="toc-entry-1">Bug Tracker</a></li>
-<li><a class="reference internal" href="#credits" id="toc-entry-2">Credits</a><ul>
-<li><a class="reference internal" href="#authors" id="toc-entry-3">Authors</a></li>
-<li><a class="reference internal" href="#contributors" id="toc-entry-4">Contributors</a></li>
-<li><a class="reference internal" href="#maintainers" id="toc-entry-5">Maintainers</a></li>
+<li><a class="reference internal" href="#configuration" id="toc-entry-1">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="toc-entry-2">Usage</a></li>
+<li><a class="reference internal" href="#bug-tracker" id="toc-entry-3">Bug Tracker</a></li>
+<li><a class="reference internal" href="#credits" id="toc-entry-4">Credits</a><ul>
+<li><a class="reference internal" href="#authors" id="toc-entry-5">Authors</a></li>
+<li><a class="reference internal" href="#contributors" id="toc-entry-6">Contributors</a></li>
+<li><a class="reference internal" href="#maintainers" id="toc-entry-7">Maintainers</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<div class="section" id="configuration">
+<h2><a class="toc-backref" href="#toc-entry-1">Configuration</a></h2>
+<ul class="simple">
+<li>Mark a partner as a resource location: on the partner form set
+<strong>Resource Location</strong> (a company-level flag).</li>
+<li>On a <tt class="docutils literal">resource.resource</tt> form, the <strong>Location presence</strong> section
+holds the lines: <em>location</em> + optional <em>presence schedule</em>
+(<tt class="docutils literal">resource.calendar</tt>). Leave the calendar empty for an always-on
+presence at that site.</li>
+</ul>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#toc-entry-2">Usage</a></h2>
+<p>Consumers read the presence map through
+<tt class="docutils literal">resource.get_locations_on_period(start, end)</tt>, which returns
+<tt class="docutils literal">{resource_id: {location_id: Intervals}}</tt> — the instants each resource
+is present at each location. An empty inner map means “present at any
+location”.</p>
+</div>
 <div class="section" id="bug-tracker">
-<h2><a class="toc-backref" href="#toc-entry-1">Bug Tracker</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-3">Bug Tracker</a></h2>
 <p>Bugs are tracked on <a class="reference external" href="https://github.com/OCA/resource/issues">GitHub Issues</a>.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
@@ -408,21 +435,21 @@ If you spotted it first, help us to smash it by providing a detailed and welcome
 <p>Do not contact contributors directly about support or help with technical issues.</p>
 </div>
 <div class="section" id="credits">
-<h2><a class="toc-backref" href="#toc-entry-2">Credits</a></h2>
+<h2><a class="toc-backref" href="#toc-entry-4">Credits</a></h2>
 <div class="section" id="authors">
-<h3><a class="toc-backref" href="#toc-entry-3">Authors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-5">Authors</a></h3>
 <ul class="simple">
 <li>Daniel Reis</li>
 </ul>
 </div>
 <div class="section" id="contributors">
-<h3><a class="toc-backref" href="#toc-entry-4">Contributors</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-6">Contributors</a></h3>
 <ul class="simple">
 <li>Daniel Reis</li>
 </ul>
 </div>
 <div class="section" id="maintainers">
-<h3><a class="toc-backref" href="#toc-entry-5">Maintainers</a></h3>
+<h3><a class="toc-backref" href="#toc-entry-7">Maintainers</a></h3>
 <p>This module is maintained by the OCA.</p>
 <a class="reference external image-reference" href="https://odoo-community.org">
 <img alt="Odoo Community Association" src="https://odoo-community.org/logo.png" />

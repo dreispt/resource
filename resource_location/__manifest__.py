@@ -1,7 +1,7 @@
 {
     "name": "Resource Location",
-    "summary": "Mark partners as resource work sites — shared location "
-    "concept for reservations and service planning",
+    "summary": "Resource locations and resource presence lines — shared "
+    "location concept for reservations and service planning",
     "version": "19.0.1.0.0",
     "development_status": "Alpha",
     "category": "Services",
@@ -12,6 +12,9 @@
     "installable": True,
     "depends": ["resource"],
     "data": [
+        "security/ir.model.access.csv",
+        "views/resource_resource_views.xml",
         "views/res_partner_views.xml",
     ],
+    "demo": ["demo/resource_location_demo.xml"],
 }
